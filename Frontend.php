@@ -6,6 +6,7 @@ use HeyFrame\Core\Framework\Bundle;
 use HeyFrame\Core\Framework\Log\Package;
 use HeyFrame\Frontend\DependencyInjection\DisableTemplateCachePass;
 use HeyFrame\Frontend\DependencyInjection\FrontendMigrationReplacementCompilerPass;
+use HeyFrame\Frontend\Framework\ThemeInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
@@ -14,7 +15,7 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
  * @internal
  */
 #[Package('framework')]
-class Frontend extends Bundle
+class Frontend extends Bundle implements ThemeInterface
 {
     /**
      * {@inheritdoc}
@@ -27,6 +28,7 @@ class Frontend extends Bundle
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/DependencyInjection'));
         $loader->load('services.xml');
         $loader->load('theme.xml');
+        $loader->load('controller.xml');
 
         $container->setParameter('frontendRoot', $this->getPath());
 

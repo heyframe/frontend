@@ -24,7 +24,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
     name: 'theme:change',
-    description: 'Change the active theme for a sales channel',
+    description: 'Change the active theme for a channel',
 )]
 #[Package('framework')]
 class ThemeChangeCommand extends Command
@@ -52,7 +52,7 @@ class ThemeChangeCommand extends Command
     protected function configure(): void
     {
         $this->addArgument('theme-name', InputArgument::OPTIONAL, 'Technical theme name');
-        $this->addOption('sales-channel', 's', InputOption::VALUE_REQUIRED, 'Sales Channel ID. Can not be used together with --all.');
+        $this->addOption('channel', 's', InputOption::VALUE_REQUIRED, 'Sales Channel ID. Can not be used together with --all.');
         $this->addOption('all', null, InputOption::VALUE_NONE, 'Set theme for all sales channel Can not be used together with -s');
         $this->addOption('no-compile', null, InputOption::VALUE_NONE, 'Skip theme compiling');
         $this->addOption('sync', null, InputOption::VALUE_NONE, 'Compile the theme synchronously');
@@ -61,13 +61,13 @@ class ThemeChangeCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $themeName = $input->getArgument('theme-name');
-        $channelOption = $input->getOption('sales-channel');
+        $channelOption = $input->getOption('channel');
 
         $this->io = new SymfonyStyle($input, $output);
         $helper = $this->getHelper('question');
 
-        if ($input->getOption('sales-channel') && $input->getOption('all')) {
-            $this->io->error('You can use either --sales-channel or --all, not both at the same time.');
+        if ($input->getOption('channel') && $input->getOption('all')) {
+            $this->io->error('You can use either --channel or --all, not both at the same time.');
 
             return self::INVALID;
         }
@@ -79,7 +79,7 @@ class ThemeChangeCommand extends Command
         \assert(\is_string($themeName));
 
         $criteria = (new Criteria())
-            ->addFilter(new EqualsFilter('typeId', Defaults::SALES_CHANNEL_TYPE_STOREFRONT));
+            ->addFilter(new EqualsFilter('typeId', Defaults::CHANNEL_TYPE_FRONTEND));
 
         $channels = $this->channelRepository->search($criteria, $this->context)->getEntities();
 
@@ -121,7 +121,7 @@ class ThemeChangeCommand extends Command
         /** @var ChannelEntity $channel */
         foreach ($selectedChannel as $channel) {
             $this->io->writeln(
-                \sprintf('Set and compiling theme "%s" (%s) as new theme for sales channel "%s"', $themeName, $theme->getId(), $channel->getName())
+                \sprintf('Set and compiling theme "%s" (%s) as new theme for channel "%s"', $themeName, $theme->getId(), $channel->getName())
             );
 
             $this->themeService->assignTheme(
