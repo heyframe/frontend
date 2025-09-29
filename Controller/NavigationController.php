@@ -6,6 +6,9 @@ use HeyFrame\Core\Framework\Log\Package;
 use HeyFrame\Core\PlatformRequest;
 use HeyFrame\Core\System\Channel\ChannelContext;
 use HeyFrame\Frontend\Framework\Routing\FrontendRouteScope;
+use HeyFrame\Frontend\Page\Navigation\NavigationPageLoaderInterface;
+use HeyFrame\Frontend\Pagelet\Footer\FooterPageletLoaderInterface;
+use HeyFrame\Frontend\Pagelet\Header\HeaderPageletLoaderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -18,6 +21,13 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Package('discovery')]
 class NavigationController extends FrontendController
 {
+    public function __construct(
+        private readonly NavigationPageLoaderInterface $navigationPageLoader,
+        private readonly HeaderPageletLoaderInterface $headerLoader,
+        private readonly FooterPageletLoaderInterface $footerLoader,
+    ) {
+    }
+
     #[Route(
         path: '/',
         name: 'frontend.home.page',
@@ -26,11 +36,13 @@ class NavigationController extends FrontendController
     )]
     public function home(Request $request, ChannelContext $context): Response
     {
+        $page = $this->navigationPageLoader->load($request, $context);
         $cmsPage = $this->getNewCmsStructure();
 
         return $this->renderFrontend(
             '@Frontend/frontend/page/content/index.html.twig',
             [
+                'page' => $page,
                 'cmsPage' => $cmsPage,
             ]
         );
