@@ -59,6 +59,7 @@
 {# @var classes - Override the default classes #}
 {# @var mediaHeight - Height of the product media (thumbnail) #}
 {# @var defaultRoute - Route to the product detail page #}
+
 {% props
     product,
     classes = {},
@@ -117,7 +118,7 @@
 
         {% block title %}
             <twig:Slot name="title">
-                <h2 {{ attributes.nested('title').defaults({ class: defaultClasses.title }) }}>
+                <h6 {{ attributes.nested('title').defaults({ class: defaultClasses.title }) }}>
                     <a
                         {{ attributes.nested('title-link').defaults({
                             class: defaultClasses.titleLink,
@@ -127,7 +128,7 @@
                     >
                         {{ product.translated.name }}
                     </a>
-                </h2>
+                </h6>
             </twig:Slot>
         {% endblock %}
 
