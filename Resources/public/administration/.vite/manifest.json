@@ -1,0 +1,11 @@
+{
+  "main.js": {
+    "file": "assets/frontend-DB4IT58x.js",
+    "name": "frontend",
+    "src": "main.js",
+    "isEntry": true,
+    "css": [
+      "assets/frontend-Ch0klpZA.css"
+    ]
+  }
+}

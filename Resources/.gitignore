@@ -79,9 +79,6 @@ typings/
 # DynamoDB Local files
 .dynamodb/
 
-app/frontend/dist/*
-!app/frontend/dist/assets
 
 app/frontend/test/app
 
-public/
